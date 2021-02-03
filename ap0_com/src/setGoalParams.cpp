@@ -28,7 +28,8 @@ move_base_msgs::MoveBaseGoal setStaticGoal(int stop_id )
     goal.target_pose.pose.position.y=0.80;
     goal.target_pose.pose.position.z = 0.0;
     tf::Quaternion quat;
-    quat.setRPY(0,0,0.0);
+    quat.setRPY(0,0,3.14);
+    quat.normalize();
     goal.target_pose.pose.orientation.x = quat[0];
     goal.target_pose.pose.orientation.y = quat[1];
     goal.target_pose.pose.orientation.z = quat[2];
@@ -48,11 +49,12 @@ move_base_msgs::MoveBaseGoal setStaticGoal(int stop_id )
     goal.target_pose.pose.position.y=0.80;
     goal.target_pose.pose.position.z = 0.0;
     tf::Quaternion quat;
-    quat.setRPY(0,0,0.0);
+    quat.setRPY(0,0,3.14);
+    quat.normalize();
     goal.target_pose.pose.orientation.x = quat[0];
     goal.target_pose.pose.orientation.y = quat[1];
     goal.target_pose.pose.orientation.z = quat[2];
-    goal.target_pose.pose.orientation.w = quat[3];
+    goal.target_pose.pose.orientation.w = 0; //quat[3];
   }
   else if (stop_id == 2)
   {
@@ -67,11 +69,18 @@ move_base_msgs::MoveBaseGoal setStaticGoal(int stop_id )
     goal.target_pose.pose.position.y=0.80;
     goal.target_pose.pose.position.z = 0.0;
     tf::Quaternion quat;
-    quat.setRPY(0,0,0.0);
+    quat.setRPY(0,0,3.14);
+    quat.normalize();
     goal.target_pose.pose.orientation.x = quat[0];
     goal.target_pose.pose.orientation.y = quat[1];
     goal.target_pose.pose.orientation.z = quat[2];
     goal.target_pose.pose.orientation.w = quat[3];
+    std::cout<<quat[0]<<endl;
+    std::cout<<quat[1]<<endl;
+    std::cout<<quat[2]<<endl;
+    std::cout<<quat[3]<<endl;
+
+
   }
   else if (stop_id == 3)
   {
@@ -86,7 +95,8 @@ move_base_msgs::MoveBaseGoal setStaticGoal(int stop_id )
     goal.target_pose.pose.position.y=1.0;
     goal.target_pose.pose.position.z = 0.0;
     tf::Quaternion quat;
-    quat.setRPY(0,0,0.0);
+    quat.setRPY(0,0,3.14);
+    quat.normalize();
     goal.target_pose.pose.orientation.x = quat[0];
     goal.target_pose.pose.orientation.y = quat[1];
     goal.target_pose.pose.orientation.z = quat[2];
@@ -105,7 +115,8 @@ move_base_msgs::MoveBaseGoal setStaticGoal(int stop_id )
     goal.target_pose.pose.position.y=0.80;
     goal.target_pose.pose.position.z = 0.0;
     tf::Quaternion quat;
-    quat.setRPY(0,0,0.0);
+    quat.setRPY(0,0,3.14);
+    quat.normalize();
     goal.target_pose.pose.orientation.x = quat[0];
     goal.target_pose.pose.orientation.y = quat[1];
     goal.target_pose.pose.orientation.z = quat[2];
@@ -125,12 +136,13 @@ move_base_msgs::MoveBaseGoal setStaticGoal(int stop_id )
     goal.target_pose.pose.position.y=0.80;
     goal.target_pose.pose.position.z = 0.0;
     tf::Quaternion quat;
-    quat.setRPY(0,0,0.0);
+    quat.setRPY(0,0,3.14);
+    quat.normalize();
     goal.target_pose.pose.orientation.x = quat[0];
     goal.target_pose.pose.orientation.y = quat[1];
     goal.target_pose.pose.orientation.z = quat[2];
     goal.target_pose.pose.orientation.w = quat[3];
   }
 
-
+  return goal;
 }

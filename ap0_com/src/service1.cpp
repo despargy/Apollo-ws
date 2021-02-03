@@ -20,12 +20,14 @@ struct Landmark {
 class LandmarkMonitor {
   public:
     LandmarkMonitor(){}
-    bool GetPermission(ap_msgs::GetPermissionRequest &request,
-                        ap_msgs::GetPermissionResponse &response) {
-                        ROS_INFO("GetPermission called");
-                        std::cin >> response.next ;
-                        return true;
-                        }
+    bool GetPermission(ap_msgs::GetPermissionRequest &request,ap_msgs::GetPermissionResponse &response)
+    {
+          ROS_INFO("GetPermission called");
+          std::cin >> response.next ;
+           // response.next = 5 ;
+
+          return true;
+    }
 };
 
 int main(int argc, char **argv)

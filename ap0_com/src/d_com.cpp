@@ -24,7 +24,7 @@
 #include <actionlib/client/simple_action_client.h>
 
 #include "setGoalParams.cpp"
-#include <ap0_com/messages.h>
+#include <ap_msgs/GetPermission.h>
 
 const int BUF_LEN=256;
 const int PORT  = 1300;
@@ -72,12 +72,12 @@ void feedbackCb(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback)
 //////////////
 
 // Action function
-bool actionTo( ap0_com::apollo_message* res)
+bool actionTo(ap_msgs::GetPermissionResponse res)
 // bool actionTo( std_msgs req, std_msgs res)
 {
 
     cout<<"Received an action"<<endl;
-    int stop_id = (*res).next ;
+    int stop_id = res ;
 
     // Checking for valid stop_id
     if(stop_id >= 0 and stop_id <=5)
@@ -97,7 +97,7 @@ bool actionTo( ap0_com::apollo_message* res)
         cout<<"SUCCEEDED"<<endl;
         ROS_INFO("The base went back at the charging spot");
         // setTCPIPConnection();
-        (*res).msg = "Success";
+        // (*res).msg = "Success";
         return true;
       }
       else
@@ -109,7 +109,7 @@ bool actionTo( ap0_com::apollo_message* res)
     else
     {
       cout<<"Warning: Invalid stop_id"<<endl;
-      (*res).msg = "Failure";
+      // (*res).msg = "Failure";
       return false;
     }
 
@@ -124,33 +124,29 @@ int main(int argc,char** argv)
 
   ac=new actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>("move_base", true);
   ac->waitForServer();
-  ros::ServiceClient client = n.serviceClient<ap0_com::apollo_message>("move_to_next");
-  // ros::ServiceClient client = n.advertiseClient<std_msgs>("move_to_next");
 
-  ap0_com::apollo_message srv;
+  ros::ServiceClient client = n.serviceClient<ap_msgs::GetPermission>("move_to_next");
 
-  if (client.call(srv))
+  ap_msgs::GetPermissionRequest req;
+  ap_msgs::GetPermissionResponse res;
+
+  ros::Rate loop_rate(2);
+  while(ros::ok())
   {
-    cout<<"Permission was given !"<<endl;
-    bool achieved = actionTo(&srv);
-  }
-  else
-  {
-    cout<<"Permission denied !"<<endl;
-  }
-  // srv. = 2;
+    if(client.call(req, res))
+    {
+      ROS_INFO("Permission given");
+      ROS_INFO("%d",res);
+      bool achieved = actionTo(res);
 
-  // daisy_pub = new ros::Publisher(n.advertise<timestorm_msg::Robot>("/daisy/from_nao_chatter", 1000) );
-  // cout<<"starting"<<endl;
-  // for(int i = 0 ; i < 6 ; i++)
-  // {
-  //   last_id[i] = i;
-  //   cout<<last_id[i]<<endl;
-  //   // actionTo(last_id[i]);
-  //
-  // }
+    }else
+    {
+      ROS_INFO("Waiting");
+    }
 
-  ros::spin();
+    loop_rate.sleep();
+    ros::spinOnce();
+  }
 
   return 0;
 }

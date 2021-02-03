@@ -31,30 +31,122 @@ const int PORT  = 1300;
 
 using namespace std;
 
+actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> *ac;
 
+
+///////////////////
+
+// Called once when a tour becomes active
+void activeCb()
+{
+  ROS_INFO("Tour received");
+}
+
+void doneCb(const actionlib::SimpleClientGoalState& state,
+            const move_base_msgs::MoveBaseResultConstPtr& result)
+{
+    /*
+     * Publish Robot msg only on success and error
+     * Do not publish on no final state (e.g. PENDING) and on PREEMPTED
+     */
+    if(state.state_==actionlib::SimpleClientGoalState::SUCCEEDED)
+    {
+        ROS_INFO("SUCCEEDED");
+    }
+    else if(state.state_==actionlib::SimpleClientGoalState::ABORTED ||
+        state.state_==actionlib::SimpleClientGoalState::REJECTED
+    )
+    {
+      ROS_INFO("NOT SUCCEEDED");
+    }
+}
+
+
+// Called every time feedback is received for the goal
+// void feedbackCb(const move_base_msgs::MoveBaseActionFeedbackConstPtr& feedback)
+void feedbackCb(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback)
+{
+    ROS_INFO("Got Feedback");
+}
+
+//////////////
+
+// Action function
+bool actionTo(int res)
+// bool actionTo( std_msgs req, std_msgs res)
+{
+
+    cout<<"Received an action"<<endl;
+    int stop_id = res ;
+
+    // Checking for valid stop_id
+    if(stop_id >= 0 and stop_id <=5)
+    {
+      move_base_msgs::MoveBaseGoal goal;
+
+      goal = setStaticGoal(stop_id);
+
+      ROS_INFO("Sending goal");
+
+      ac->sendGoal(goal, &doneCb, &activeCb, &feedbackCb);
+
+      ac->waitForResult();
+
+      if(ac->getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+      {
+        cout<<"SUCCEEDED"<<endl;
+        ROS_INFO("The base moved with success");
+        // setTCPIPConnection();
+        // (*res).msg = "Success"; //TODO
+        return true;
+      }
+      else
+      {
+        ROS_INFO("The base failed to move with success");
+        ROS_INFO("FAILED");
+      }
+    }
+    else
+    {
+      cout<<"Warning: Invalid stop_id"<<endl;
+      // (*res).msg = "Failure"; //TODO
+      return false;
+    }
+
+}
 
 int main(int argc,char** argv)
 {
   ros::init(argc, argv, "d_com");
   ros::NodeHandle n;
 
-  // ac=new actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>("move_base", true);
-  // ac->waitForServer();
-  // ros::ServiceClient client = n.serviceClient<std_msgs>("move_to_next");
-  //
-  // std_msgs srv;
-  //
-  // if (client.call(srv))
-  // {
-  //   cout<<"Permission was given !"<<endl;
-  //   bool achieved = actionTo(&srv);
-  // }
-  // else
-  // {
-  //   cout<<"Permission denied !"<<endl;
-  // }
+  ac=new actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>("move_base", true);
+  ac->waitForServer();
 
-  ros::spin();
+  ros::ServiceClient client = n.serviceClient<ap_msgs::GetPermission>("move_to_next");
+
+  // client.waitForExistence();
+
+  ap_msgs::GetPermissionRequest req;
+  ap_msgs::GetPermissionResponse res;
+
+  ros::Rate loop_rate(2);
+  while(ros::ok())
+  {
+    if(client.call(req, res))
+    {
+      ROS_INFO("Permission given");
+      ROS_INFO("%d",res.next);
+      bool achieved = actionTo(res.next);
+
+    }else
+    {
+      ROS_INFO("Waiting");
+    }
+
+    loop_rate.sleep();
+    ros::spinOnce();
+  }
 
   return 0;
 }

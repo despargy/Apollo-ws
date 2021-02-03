@@ -42,7 +42,7 @@ include_directories(
 
 #add_executable(d_com
 #  src/d_com.cpp
-#
+#)
 #add_executable(service
 #  src/service.cpp
 #)
@@ -54,6 +54,11 @@ add_executable(client1
 add_executable(service1
   src/service1.cpp
 )
+
+#add_dependencies(d_com ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+#target_link_libraries(d_com
+#  ${catkin_LIBRARIES}
+#)
 
 add_dependencies(client1 ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(client1
