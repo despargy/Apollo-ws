@@ -1,0 +1,14 @@
+<launch>
+  <!-- Run with map server-->
+  <arg name="world_file1"  default="$(find turtlebot_gazebo)/maps/playgrund.yaml"/>
+  <node name="map_server" pkg="map_server" type="map_server" arg="$(arg map_file)" />
+
+  <!-- Run AMCL-->
+  <include file="$(find turtlebot_navigation/launch/amcl_demo.launch)" />
+
+  <!-- Run Move Base-->
+  <include file="$(find turtlebot_navigation/launch/include/move_demo.launch.xml)" />
+
+
+
+</launch>
