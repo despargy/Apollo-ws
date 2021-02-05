@@ -135,7 +135,7 @@ int main(int argc,char** argv)
   {
     if(client.call(req, res))
     {
-      ROS_INFO("Permission given");
+      ROS_INFO("Permission is given");
       ROS_INFO("%d",res);
       bool achieved = actionTo(res);
 

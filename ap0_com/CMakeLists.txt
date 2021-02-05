@@ -16,6 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
   ap_msgs
+  tf2_ros
 )
 
 #add_message_files(FILES apollo.msg)
@@ -24,7 +25,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES ap0_com
-   CATKIN_DEPENDS actionlib actionlib_msgs message_runtime move_base_msgs roscpp std_msgs ap_msgs
+   CATKIN_DEPENDS actionlib actionlib_msgs tf2_ros  message_runtime move_base_msgs roscpp std_msgs ap_msgs
 #  DEPENDS system_lib
 )
 

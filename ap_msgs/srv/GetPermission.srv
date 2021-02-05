@@ -1,2 +1,4 @@
+int64 current
 ---
 int64 next # The id of the next stop
+string msg
