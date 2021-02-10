@@ -25,6 +25,7 @@
 #include "setGoalParams.cpp"
 #include <ap_msgs/GetPermission.h>
 #include "tf2_ros/message_filter.h"
+
 const int BUF_LEN=256;
 const int PORT  = 1300;
 
@@ -62,25 +63,27 @@ void doneCb(const actionlib::SimpleClientGoalState& state,
 
 
 // Called every time feedback is received for the goal
-// void feedbackCb(const move_base_msgs::MoveBaseActionFeedbackConstPtr& feedback)
 void feedbackCb(const move_base_msgs::MoveBaseFeedbackConstPtr& feedback)
 {
-    ROS_INFO("Got Feedback");
+    ROS_INFO("In Feedback - Listening to server");
 }
 
 //////////////
 
 // Action function
-bool actionTo(ap_msgs::GetPermissionResponse res, bool *valid)
+void actionTo(ap_msgs::GetPermissionResponse res)
 // bool actionTo( std_msgs req, std_msgs res)
 {
     cout<<"Received an action"<<endl;
     int stop_id = res.next ;
 
+    if (stop_id == 8)
+      ac-> cancelGoal();
+
     // Checking for valid stop_id
     if(stop_id >= 0 and stop_id <=5)
     {
-      *valid = true;
+      // *valid = true;
       move_base_msgs::MoveBaseGoal goal;
 
       goal = setStaticGoal(stop_id);
@@ -88,28 +91,32 @@ bool actionTo(ap_msgs::GetPermissionResponse res, bool *valid)
       ROS_INFO("Sending goal");
 
       ac->sendGoal(goal, &doneCb, &activeCb, &feedbackCb);
-      // if (stop_id == 1)
-      //   ac-> cancelGoal();
-      ac->waitForResult();
 
-      if(ac->getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
-      {
-        ROS_INFO("The base moved with success");
-        return  true;
-      }
-      else
-      {
-        ROS_INFO("The base failed to move with success");
-        ROS_INFO("FAILED");
-        return  false;
-      }
+      // ac->waitForResult();
+
+      // if(ac->getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+      // {
+      //   ROS_INFO("The base moved with success");
+      //   return  true;
+      // }
+      // else
+      // {
+      //   ROS_INFO("The base failed to move with success");
+      //   ROS_INFO("FAILED");
+      //   return  false;
+      // }
     }
     else
     {
-      *valid = false;
+      // *valid = false;
       ROS_INFO("Warning: Invalid stop_id");
-      return  false;
+    //   return  false;
     }
+}
+
+void checkInterupts()
+{
+
 }
 
 int main(int argc,char** argv)
@@ -117,18 +124,18 @@ int main(int argc,char** argv)
   ros::init(argc, argv, "d_com");
   ros::NodeHandle n;
 
+  // action client
   ac=new actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>("move_base", true);
   ac->waitForServer();
 
+  // client receiving ids from server
   ros::ServiceClient client = n.serviceClient<ap_msgs::GetPermission>("move_to_next");
+
   // client.waitForServer();
   // client.waitForExistence();
 
   ap_msgs::GetPermissionRequest req;
   ap_msgs::GetPermissionResponse res;
-
-  bool valid;
-  // tf2_ros::MessageFilter<std_msgs::int> mf;
 
   ros::Rate loop_rate(2);
   while(ros::ok())
@@ -137,20 +144,18 @@ int main(int argc,char** argv)
     if(client.call(req, res))
     {
 
-      bool achieved;
-      do
-      {
-        ROS_INFO("Server gave me a goal");
-        ROS_INFO("%d",res.next);
-        achieved = actionTo(res, &valid); // call action to send goal
-      }while( valid and !achieved); // try again if valid and not reached
+      ROS_INFO("Server gave me a goal");
+      ROS_INFO("%d",res.next);
+      // call action to send goal - handle response
+      actionTo(res);
 
-      if (achieved)
+      // handle success - refresh state
+      if (ac->getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
       {
         req.current = res.next; // renew current state
         ROS_INFO("Now speek");  //TODO inform (as server) to speek
       }
-      else if (!valid)
+      else
       {
        ROS_INFO("Invalid goal send");
       }
@@ -162,6 +167,7 @@ int main(int argc,char** argv)
 
     loop_rate.sleep();
     ros::spinOnce();
+
   }
 
   return 0;

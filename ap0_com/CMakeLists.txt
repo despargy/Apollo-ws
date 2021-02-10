@@ -19,8 +19,23 @@ find_package(catkin REQUIRED COMPONENTS
   tf2_ros
 )
 
+find_package(Boost REQUIRED COMPONENTS system)
+
+## Generate actions in the 'action' folder
+# add_action_files(
+#   FILES
+#   apMove.action
+# )
+
+generate_messages(
+  DEPENDENCIES
+  std_msgs  # Or other packages containing msgs
+)
+
 #add_message_files(FILES apollo.msg)
 #add_service_files(FILES GetPermission.srv)
+
+
 
 catkin_package(
 #  INCLUDE_DIRS include
@@ -41,6 +56,7 @@ include_directories(
 )
 
 
+
 #add_executable(d_com
 #  src/d_com.cpp
 #)
@@ -56,6 +72,14 @@ add_executable(service1
   src/service1.cpp
 )
 
+# add_executable(apollo_client_master
+#  src/apollo_client_master.cpp
+#)
+
+#add_executable(service_inter
+#  src/service_inter.cpp
+#)
+
 #add_dependencies(d_com ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 #target_link_libraries(d_com
 #  ${catkin_LIBRARIES}
@@ -70,3 +94,13 @@ add_dependencies(service1 ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_
 target_link_libraries(service1
   ${catkin_LIBRARIES}
 )
+
+#add_dependencies(apollo_client_master ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+#target_link_libraries(apollo_client_master
+#  ${catkin_LIBRARIES}
+#)
+
+#add_dependencies(service_inter ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+#target_link_libraries(service_inter
+#  ${catkin_LIBRARIES}
+#)

@@ -8,6 +8,8 @@ project(ap_msgs)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  actionlib
+  actionlib_msgs
   message_generation
   roscpp
   rospy
@@ -57,19 +59,19 @@ find_package(catkin REQUIRED COMPONENTS
  add_service_files(
    FILES
    GetPermission.srv
+   Interupt.srv
  )
 
 ## Generate actions in the 'action' folder
-# add_action_files(
-#   FILES
-#   Action1.action
-#   Action2.action
-# )
+ add_action_files(
+   FILES
+   apMove.action
+ )
 
 ## Generate added messages and services with any dependencies listed here
  generate_messages(
    DEPENDENCIES
-   std_msgs  # Or other packages containing msgs
+   std_msgs  actionlib actionlib_msgs # Or other packages containing msgs
  )
 
 ################################################
@@ -104,7 +106,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES ap_msgs
-  CATKIN_DEPENDS roscpp rospy message_runtime
+  CATKIN_DEPENDS roscpp rospy message_runtime actionlib actionlib_msgs
 #  DEPENDS system_lib
 )
 

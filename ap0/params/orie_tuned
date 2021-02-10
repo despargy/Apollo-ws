@@ -1,0 +1,19 @@
+!!python/object/new:dynamic_reconfigure.encoding.Config
+dictitems:
+  groups: !!python/object/new:dynamic_reconfigure.encoding.Config
+    dictitems:
+      groups: !!python/object/new:dynamic_reconfigure.encoding.Config
+        state: []
+      id: 0
+      name: Default
+      parameters: !!python/object/new:dynamic_reconfigure.encoding.Config
+        state: []
+      parent: 0
+      state: true
+      type: ''
+      yaml_cfg_data: ''
+      yaml_cfg_file: /home/despina/catkin_ws/src/turtlebot-kinetic/turtlebot_bringup/param/mux.yaml
+    state: []
+  yaml_cfg_data: ''
+  yaml_cfg_file: /home/despina/catkin_ws/src/turtlebot-kinetic/turtlebot_bringup/param/mux.yaml
+state: []

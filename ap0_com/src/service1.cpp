@@ -24,8 +24,11 @@ class LandmarkMonitor {
     {
           ROS_INFO("GetPermission called");
           std::cin >> response.next ;
-           // response.next = 5 ;
-
+          if (response.next == 8)
+          {
+            std::cin.clear();
+            std::cout<<"cin.clear"<<std::endl;
+          }
           return true;
     }
 };

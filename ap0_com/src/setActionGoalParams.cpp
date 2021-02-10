@@ -11,9 +11,11 @@
 #include <move_base_msgs/MoveBaseResult.h>
 #include <tf/transform_datatypes.h>
 #include <map>
+
+
 using namespace std;
 
-move_base_msgs::MoveBaseGoal setStaticGoal(int stop_id )
+move_base_msgs::MoveBaseGoal setActionStaticGoal(int stop_id )
 {
   move_base_msgs::MoveBaseGoal goal;
   cout<<"Go to "<<stop_id<<endl;
@@ -21,7 +23,7 @@ move_base_msgs::MoveBaseGoal setStaticGoal(int stop_id )
   if (stop_id == 0)
   {
     //we'll send the robot back to the charging spot
-    goal.target_pose.header.frame_id = "map"; //TODO
+    goal.target_pose.header.frame_id = "base_link"; //TODO
     goal.target_pose.header.stamp = ros::Time::now();
 
     goal.target_pose.pose.position.x = -4.0; //TODO
@@ -39,10 +41,10 @@ move_base_msgs::MoveBaseGoal setStaticGoal(int stop_id )
   else if (stop_id == 1)
   {
     //we'll send the robot to picked stop
-    goal.target_pose.header.frame_id = "map"; //TODO
+    goal.target_pose.header.frame_id = "base_link"; //TODO
     goal.target_pose.header.stamp = ros::Time::now();
 
-    goal.target_pose.pose.position.x = -6.0; //TODO
+    goal.target_pose.pose.position.x = -1.0; //TODO
     goal.target_pose.pose.position.y=0.80;
     goal.target_pose.pose.position.z = 0.0;
     tf::Quaternion quat;
@@ -56,7 +58,7 @@ move_base_msgs::MoveBaseGoal setStaticGoal(int stop_id )
   else if (stop_id == 2)
   {
     //we'll send the robot to picked stop
-    goal.target_pose.header.frame_id = "map"; //TODO
+    goal.target_pose.header.frame_id = "base_link"; //TODO
     goal.target_pose.header.stamp = ros::Time::now();
 
     goal.target_pose.pose.position.x = -4.0; //TODO
@@ -74,7 +76,7 @@ move_base_msgs::MoveBaseGoal setStaticGoal(int stop_id )
   else if (stop_id == 3)
   {
     //we'll send the robot to picked stop
-    goal.target_pose.header.frame_id = "map"; //TODO
+    goal.target_pose.header.frame_id = "base_link"; //TODO
     goal.target_pose.header.stamp = ros::Time::now();
 
     goal.target_pose.pose.position.x = -1.60; //TODO
@@ -91,7 +93,7 @@ move_base_msgs::MoveBaseGoal setStaticGoal(int stop_id )
   else if (stop_id == 4)
   {
     //we'll send the robot to picked stop
-    goal.target_pose.header.frame_id = "map"; //TODO
+    goal.target_pose.header.frame_id = "base_link"; //TODO
     goal.target_pose.header.stamp = ros::Time::now();
 
     goal.target_pose.pose.position.x = -2.0; //TODO
@@ -109,7 +111,7 @@ move_base_msgs::MoveBaseGoal setStaticGoal(int stop_id )
   else if (stop_id == 5)
   {
     //we'll send the robot to picked stop
-    goal.target_pose.header.frame_id = "map"; //TODO
+    goal.target_pose.header.frame_id = "base_link"; //TODO
     goal.target_pose.header.stamp = ros::Time::now();
 
     goal.target_pose.pose.position.x = -8.0; //TODO
