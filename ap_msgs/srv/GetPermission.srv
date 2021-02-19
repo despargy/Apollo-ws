@@ -1,4 +1,5 @@
 int64 current
+bool success
 ---
 int64 next # The id of the next stop
 string msg

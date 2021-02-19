@@ -1,0 +1,8 @@
+prefix=/home/despina/apollo_ws/src/ap0-build/devel
+
+Name: ap0
+Description: Description of ap0
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

@@ -1,0 +1,4 @@
+T1) $roslaunch ap0 navigation
+T2) $rosrun ap0_com service1
+T3) (a) $make clean/ (b) $make /  (c) $./cl
+T4) $ rosrun ap0_com client1

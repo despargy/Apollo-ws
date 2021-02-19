@@ -72,6 +72,20 @@ add_executable(service1
   src/service1.cpp
 )
 
+add_executable(apollo_ssrv
+  src/apollo_ssrv.cpp
+)
+add_executable(apollo_master
+  src/apollo_master.cpp
+)
+
+add_executable(apollo_ssrv_interupt
+  src/apollo_ssrv_interupt.cpp
+)
+add_executable(apollo_master_interupt
+  src/apollo_master_interupt.cpp
+)
+
 # add_executable(apollo_client_master
 #  src/apollo_client_master.cpp
 #)
@@ -94,6 +108,24 @@ add_dependencies(service1 ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_
 target_link_libraries(service1
   ${catkin_LIBRARIES}
 )
+add_dependencies(apollo_ssrv ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(apollo_ssrv
+  ${catkin_LIBRARIES}
+)
+add_dependencies(apollo_master ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(apollo_master
+  ${catkin_LIBRARIES}
+)
+
+add_dependencies(apollo_ssrv_interupt ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(apollo_ssrv_interupt
+  ${catkin_LIBRARIES}
+)
+add_dependencies(apollo_master_interupt ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(apollo_master_interupt
+  ${catkin_LIBRARIES}
+)
+
 
 #add_dependencies(apollo_client_master ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 #target_link_libraries(apollo_client_master
