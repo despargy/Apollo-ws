@@ -117,6 +117,12 @@ int main(int argc, char *argv[])
             break;
         }
         printf("Client reply : %s\n",client_message);
+        if( recv(sock, client_message, 200, 0) < 0)
+        {
+            printf("recv failed");
+            break;
+        }
+        printf("Client reply : %s\n",client_message);
 
         // Send some data
         if( send(sock1, client_message, strlen(client_message), 0) < 0)
@@ -124,12 +130,13 @@ int main(int argc, char *argv[])
             printf("Send failed");
             return 1;
         }
+
         close(sock);
         sleep(1);
 
 
 
     }
-    
+
     return 0;
 }

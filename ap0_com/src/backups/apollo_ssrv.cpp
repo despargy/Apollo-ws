@@ -62,27 +62,32 @@ class LandmarkMonitor {
 int main(int argc, char **argv)
 {
   ros::init(argc, argv, "service1");
-  ros::NodeHandle nh;
+  ros::NodeHandle nh, nhInter;
 
   LandmarkMonitor monitor, monitorInterupt;
 
-  ros::AsyncSpinner spinner(3);
-  spinner.start();
+  int idInterupt;
+  handleInteruptClient(&idInterupt);
 
-  ros::ServiceServer service = nh.advertiseService("move_to_next", &LandmarkMonitor::GetPermission, &monitor);
-  ROS_INFO("Ready to move base.");
+  // ros::AsyncSpinner spinner(3);
+  // spinner.start();
+
   //handle handle interupts
   ros::ServiceServer serviceInterupt = nh.advertiseService("handle_interupt", &LandmarkMonitor::GetInterupt, &monitorInterupt);
   ROS_INFO("After handle interupt.");
+  // recieve ids from GUI
+  ros::ServiceServer service = nhInter.advertiseService("move_to_next", &LandmarkMonitor::GetPermission, &monitor);
+  ROS_INFO("Ready to move base.");
 
+  //
   // while(true)
   // {
-  //   if (idInterupt == 8)
+  //   if ( true)
   //     ROS_INFO("BREAK");
   // }
 
   // ros::spin();
-  ros::waitForShutdown();
+  // ros::waitForShutdown();
 
   return 0;
 }

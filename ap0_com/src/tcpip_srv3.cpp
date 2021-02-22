@@ -18,7 +18,7 @@ short SocketCreate(void)
 int BindCreatedSocket(int hSocket)
 {
     int iRetval=-1;
-    int ClientPort = 90190;
+    int ClientPort = 90191;
     struct sockaddr_in  remote= {0};
     /* Internet address family */
     remote.sin_family = AF_INET;
@@ -58,30 +58,6 @@ int main(int argc, char *argv[])
     {
       char message[100] = {0};
 
-      printf("Waiting for incoming connections...\n");
-      clientLen = sizeof(struct sockaddr_in);
-      //accept connection from an incoming client
-      sock = accept(socket_desc,(struct sockaddr *)&client,(socklen_t*)&clientLen);
-      if (sock < 0)
-      {
-          perror("accept failed");
-          return 1;
-      }
-      printf("Connection accepted\n");
-
-      //Receive OK
-      // //Receive a reply from the client
-      if( recv(sock, client_message, 200, 0) < 0)
-      {
-          printf("recv failed");
-          break;
-      }
-      printf("Client reply : %s\n",client_message);
-
-      close(sock);
-      sleep(1);
-      ///////////////////////////////////////
-
         printf("Waiting for incoming connections...\n");
         clientLen = sizeof(struct sockaddr_in);
         //accept connection from an incoming client
@@ -94,6 +70,7 @@ int main(int argc, char *argv[])
         printf("Connection accepted\n");
 
         // Send some data
+        printf("Enter 8 to interupt\n");
         scanf("%s",message);
         // std::cin>>message;
         if( send(sock, message, strlen(message), 0) < 0)

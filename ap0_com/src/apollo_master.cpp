@@ -26,7 +26,7 @@
 #include <ap_msgs/GetPermission.h>
 #include "tf2_ros/message_filter.h"
 #include "useTcpipClient.cpp"
-// #include <boost/thread.hpp>
+#include "std_msgs/Int8.h"
 
 const int BUF_LEN=256;
 const int PORT  = 1300;
@@ -36,6 +36,32 @@ using namespace std;
 actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> *ac;
 ap_msgs::GetPermissionRequest req;
 ap_msgs::GetPermissionResponse res;
+
+///////////////
+
+void InteruptCallback(const std_msgs::Int8 id)
+{
+  ROS_INFO("I took an Interupt");
+  // ac-> cancelGoal();
+  if (id.data == 8) //TODO
+  {
+    ac-> cancelGoal();
+    ROS_INFO("Action wait - cancel / interupt id = 8 ");
+    // let GUI send a new goal
+    req.success = true;
+
+  }
+  else if (id.data  == 0) //TODO
+  {
+    ac-> cancelGoal();
+    ROS_INFO("Action wait - cancel / interupt id = 0 ");
+    // let GUI send a new goal
+    req.success = true;
+
+  }
+
+}
+
 
 ///////////////////
 
@@ -83,18 +109,7 @@ void actionTo(ap_msgs::GetPermissionRequest req, ap_msgs::GetPermissionResponse 
     cout<<"Received an action"<<endl;
     int stop_id = res.next ;
 
-    if (stop_id == 0)
-    {
-      // ac-> cancelGoal();
-      ROS_INFO("Action wait - cancel / stop id = 0 ");
-    }
-    else if (stop_id == 8)
-    {
-      ac-> cancelGoal();
-      ROS_INFO("Action wait - cancel / stop id = 8 ");
-      // Checking for valid stop_id
-    }
-    else if(stop_id >= 1 and stop_id <=5)
+    if (stop_id >= 1 and stop_id <=5)
     {
       move_base_msgs::MoveBaseGoal goal;
       goal = setStaticGoal(stop_id);
@@ -114,33 +129,19 @@ int main(int argc,char** argv)
   ros::init(argc, argv, "d_com");
   ros::NodeHandle n;
 
-  // ros::AsyncSpinner spinner(2);
-  // spinner.start();
-
   // action client
   ac=new actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>("move_base", true);
   ac->waitForServer();
 
-  // // reqInter
-  // ap_msgs::GetPermissionRequest reqInter;
-  // ap_msgs::GetPermissionResponse resInter;
-
-
+  // works with Async - not working without
+  ros::AsyncSpinner spinner(2);
+  spinner.start();
 
   // service Client to receive ids from server
   ros::ServiceClient client = n.serviceClient<ap_msgs::GetPermission>("move_to_next");
-  // ros::ServiceClient clientInterupt = n.serviceClient<ap_msgs::GetPermission>("handle_interupt");
+  ros::Subscriber sub = n.subscribe("interupt_chatter", 1000, InteruptCallback);
 
-  // client.waitForServer();
-  // clientInterupt.waitForServer();
-
-  // client.waitForExistence();
   req.success = true;
-
-
-  // clientInterupt.call(reqInter,resInter);
-
-
   ros::Rate loop_rate(2);
   while(ros::ok())
   {
@@ -157,19 +158,11 @@ int main(int argc,char** argv)
       ROS_INFO("Waiting for server to connect.");
     }
 
-    // if(clientInterupt.call(reqInter, resInter))
-    // {
-    //   ROS_INFO("After INTERUPT .call");
-    // }
-    // else
-    // {
-    //   ROS_INFO("Waiting for INTERUPT server to connect.");
-    // }
-
     loop_rate.sleep();
     ros::spinOnce();
 
   }
-    // ros::waitForShutdown();
+  ros::waitForShutdown();
+
   return 0;
 }

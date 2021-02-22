@@ -67,7 +67,7 @@ int SocketReceive(int hSocket,char* Rsp,short RvcSize)
 // int cl_main(int *id_)
 int useTcpClient(int *id)
 {
-    int hSocket, hSocket2, read_size;
+    int hSocket,  read_size;
     struct sockaddr_in server;
     char SendToServer[100] = {0};
     char server_reply[200] = {0};
@@ -167,7 +167,7 @@ int informGoalReached()
 
 int handleInteruptClient(int *id)
 {
-    int hSocket, hSocket2, read_size;
+    int hSocket, read_size;
     struct sockaddr_in server;
     char SendToServer[100] = {0};
     char server_reply[200] = {0};
@@ -183,14 +183,14 @@ int handleInteruptClient(int *id)
 
         return 1;
     }
-    printf("Socket is created\n");
+    printf("Socket handleInteruptClient is created\n");
     //Connect to remote server
     if (SocketConnect(hSocket, 90191) < 0)
     {
         perror("connect failed.\n");
         return 1;
     }
-    printf("Sucessfully conected with server\n");
+    printf("Sucessfully handleInteruptClient conected with server\n");
 
     //......................
     // printf("Enter the Message: ");
@@ -210,6 +210,7 @@ int handleInteruptClient(int *id)
   //   SocketSend(hSocket, SendToServer, strlen(SendToServer));
   //   printf("comment - like send\n");
   // }
+    printf("Before Recieve. Am I gonna wait? interupt\n");
 
     read_size = SocketReceive(hSocket, server_reply, 200);
     *id = atoi( server_reply );

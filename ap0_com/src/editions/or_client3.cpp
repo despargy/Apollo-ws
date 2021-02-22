@@ -16,7 +16,7 @@ short SocketCreate(void)
 int SocketConnect(int hSocket)
 {
     int iRetval=-1;
-    int ServerPort = 90191;
+    int ServerPort = 90190;
     struct sockaddr_in remote= {0};
     remote.sin_addr.s_addr = inet_addr("127.0.0.1"); //Local Host
     remote.sin_family = AF_INET;
@@ -77,15 +77,15 @@ int main(int argc, char *argv[])
         return 1;
     }
     printf("Sucessfully conected with server\n");
-    // printf("Enter the Message: ");
-    // gets(SendToServer);
-    //Send data to the server
-    // SocketSend(hSocket, SendToServer, strlen(SendToServer));
-    //Received the data from the server
 
+    printf("Enter the Message: ");
+    gets(SendToServer);
+    //Send data to the server
+    SocketSend(hSocket, SendToServer, strlen(SendToServer));
+
+    //Received the data from the server
     read_size = SocketReceive(hSocket, server_reply, 200);
     printf("Server Response : %s\n\n",server_reply);
-
     close(hSocket);
     shutdown(hSocket,0);
     shutdown(hSocket,1);

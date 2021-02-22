@@ -122,26 +122,26 @@ int main(int argc,char** argv)
   ac->waitForServer();
 
   // // reqInter
-  ap_msgs::GetPermissionRequest reqInter;
-  ap_msgs::GetPermissionResponse resInter;
+  // ap_msgs::GetPermissionRequest reqInter;
+  // ap_msgs::GetPermissionResponse resInter;
+
+
 
   // service Client to receive ids from server
   ros::ServiceClient client = n.serviceClient<ap_msgs::GetPermission>("move_to_next");
-  ros::ServiceClient clientInterupt = n.serviceClient<ap_msgs::GetPermission>("handle_interupt");
-  clientInterupt.call(reqInter,resInter);
+  // ros::ServiceClient clientInterupt = n.serviceClient<ap_msgs::GetPermission>("handle_interupt");
 
   // client.waitForServer();
   // clientInterupt.waitForServer();
   // client.waitForExistence();
 
   req.success = true;
+  // clientInterupt.call(reqInter,resInter);
+  // ROS_INFO("Called Interupt");
+
   ros::Rate loop_rate(2);
   while(ros::ok())
   {
-    if (clientInterupt.call(reqInter,resInter))
-      ROS_INFO("TRUE CALL");
-    else
-      ROS_INFO("FALSE CALL");
 
     if(client.call(req, res))
     {
@@ -163,7 +163,6 @@ int main(int argc,char** argv)
     // {
     //   ROS_INFO("Waiting for INTERUPT server to connect.");
     // }
-    clientInterupt.call(reqInter,resInter);
 
     loop_rate.sleep();
     ros::spinOnce();

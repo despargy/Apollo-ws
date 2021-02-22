@@ -67,7 +67,7 @@ int SocketReceive(int hSocket,char* Rsp,short RvcSize)
 // int cl_main(int *id_)
 int useTcpClient(int *id)
 {
-    int hSocket, hSocket2, read_size;
+    int hSocket, read_size;
     struct sockaddr_in server;
     char SendToServer[100] = {0};
     char server_reply[200] = {0};
@@ -79,8 +79,6 @@ int useTcpClient(int *id)
     if(hSocket == -1) // if nt while
     {
         printf("Could not create socket\n");
-        // hSocket = SocketCreate(); //commend
-
         return 1;
     }
     printf("Socket is created\n");
@@ -167,7 +165,7 @@ int informGoalReached()
 
 int handleInteruptClient(int *id)
 {
-    int hSocket, hSocket2, read_size;
+    int hSocket,  read_size;
     struct sockaddr_in server;
     char SendToServer[100] = {0};
     char server_reply[200] = {0};
@@ -179,8 +177,6 @@ int handleInteruptClient(int *id)
     if(hSocket == -1) // if nt while
     {
         printf("Could not create socket\n");
-        // hSocket = SocketCreate(); //commend
-
         return 1;
     }
     printf("Socket is created\n");
